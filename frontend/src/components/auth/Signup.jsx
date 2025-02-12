@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../shared/navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
