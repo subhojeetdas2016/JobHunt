@@ -11,8 +11,12 @@ const Browse = () => {
   const { allJobs } = useSelector((store) => store.job);
   const dispatch = useDispatch();
 
+  console.log("Rendering Browse page...");
+  console.log("Fetched jobs:", allJobs);
+
   useEffect(() => {
     return () => {
+      console.log("Cleaning up: Resetting searched query.");
       dispatch(setSearchedQuery(''));
     };
   }, [dispatch]);
@@ -25,17 +29,20 @@ const Browse = () => {
           Search Result <span className="text-red-600">({allJobs.length})</span>
         </h1>
         <div className="grid grid-cols-3 gap-4">
-          {allJobs.map((job) => (
-            <motion.div
-              key={job?._id}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Job job={job} />
-            </motion.div>
-          ))}
+          {allJobs.map((job) => {
+            console.log("Rendering job:", job);
+            return (
+              <motion.div
+                key={job?._id}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Job job={job} />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>

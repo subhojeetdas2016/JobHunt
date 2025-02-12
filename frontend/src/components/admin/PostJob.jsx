@@ -14,7 +14,6 @@ import {
 } from "../ui/select";
 import axios from "axios";
 import { JOB_API_END_POINT } from "@/utils/constant";
-import { application } from './../../../../Backend/models/application.model';
 import { toast } from "sonner";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -37,43 +36,53 @@ function PostJob() {
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const { companies } = useSelector((store) => store.company);
+
   const changeEventHandler = (e) => {
+    console.log("Change Event - Field:", e.target.name, "Value:", e.target.value);
     setinput({ ...input, [e.target.name]: e.target.value });
   };
+
   const selectChangeHandler = (value) => {
+    console.log("Select Change - Selected Company Name:", value);
     const selectedCompany = companies.find(
       (company) => company.name.toLowerCase() === value
     );
     if (selectedCompany) {
+      console.log("Company Found - ID:", selectedCompany._id);
       setinput({ ...input, companyId: selectedCompany._id });
     } else {
       console.error("Selected company not found.");
     }
   };
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(input);
-    try{
+    console.log("Form Submission - Input Data:", input);
+    try {
       setloading(true);
-      const res = await axios.post(`${JOB_API_END_POINT}/post`,input,{
-      headers: {
+      console.log("Sending API Request to:", `${JOB_API_END_POINT}/post`);
+      const res = await axios.post(`${JOB_API_END_POINT}/post`, input, {
+        headers: {
           "Content-Type": "application/json",
         },
-        withCredentials:true
+        withCredentials: true,
       });
-      if(res.data.success){
+      console.log("API Response:", res.data);
+      if (res.data.success) {
         toast.success(res.data.message);
         navigate("/admin/jobs");
       }
-    }
-    catch(error){
-      toast.error(error.response.data.message)
-      console.error(error);
-    }
-    finally{
+    } catch (error) {
+      console.error("API Error:", error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      }
+    } finally {
       setloading(false);
     }
   };
+
+  console.log("Redux State - Companies:", companies);
 
   return (
     <div>
@@ -186,20 +195,19 @@ function PostJob() {
               </SelectContent>
             </Select>
           )}
-          <div className=" flex flex-col items-center">
-            
+          <div className="flex flex-col items-center">
             {loading ? (
-            <Button>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
-            </Button>
-          ) : (
-            <Button
-            type="submit"
-            className="text-white hover:bg-pink-600/90 flex items-center justify-center mt-4 bg-pink-600 transform transition-transform duration-150 active:scale-95"
-          >
-            Submit New Job
-          </Button>
-          )}
+              <Button>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="text-white hover:bg-pink-600/90 flex items-center justify-center mt-4 bg-pink-600 transform transition-transform duration-150 active:scale-95"
+              >
+                Submit New Job
+              </Button>
+            )}
 
             {companyArray.length === 0 && (
               <p className="underline text-xs text-red-600 font-semibold text-center my-3">

@@ -6,9 +6,18 @@ import { motion } from "framer-motion";
 const LatestJobCards = ({ Job }) => {
   const navigate = useNavigate();
 
+  // Debugging Logs
+  console.log("Rendering Job Card for:", Job); // Logs the entire job object
+  console.log("Job ID:", Job?._id); // Logs the job ID for navigation
+  console.log("Company Name:", Job?.company?.name); // Logs the company name
+  console.log("Job Title:", Job?.title); // Logs the job title
+
   return (
     <div
-      onClick={() => navigate(`/description/${Job?._id}`)} // Use Job._id here
+      onClick={() => {
+        console.log("Navigating to job description for Job ID:", Job?._id); // Logs navigation action
+        navigate(`/description/${Job?._id}`);
+      }}
       className="m-5 p-10 rounded-md shadow-2xl bg-white border-[#817878] cursor-pointer"
     >
       <div>

@@ -9,32 +9,41 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut, User2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import Profile from "../Profile";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const logutHandler = async () => {
+    console.log("Logout initiated...");
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
         withCredentials: true,
       });
 
+      console.log("Logout API Response:", res.data);
+
       if (res.data.success) {
+        console.log("Logout successful, clearing user state...");
         dispatch(setUser(null));
         navigate("/");
         toast.success("Logged out successfully!");
+      } else {
+        console.error("Logout failed:", res.data.message);
       }
     } catch (error) {
       console.error("Logout error:", error);
       toast.error(error.response?.data?.message || "An error occurred.");
     }
   };
+
+  console.log("Navbar rendered. Current user:", user);
 
   return (
     <div className="bg-[#F3E5F5]">
@@ -104,18 +113,14 @@ const Navbar = () => {
                   </Avatar>
                   <h4 className="font-medium">{user?.fullname}</h4>
                 </div>
-                        {/* //conditionaly for student and the recruiter */}
-                {
-                    user && user.role == 'student' &&(
-                        <div className=" flex w-fit items-center gap-2 cursor-pointer">
-                  <User2 />
-                  <Button variant="link">
-                    <Link to="/profile">View Profile</Link>
-                  </Button>
-                </div>
-
-                    )
-                }
+                {user && user.role == "student" && (
+                  <div className=" flex w-fit items-center gap-2 cursor-pointer">
+                    <User2 />
+                    <Button variant="link">
+                      <Link to="/profile">View Profile</Link>
+                    </Button>
+                  </div>
+                )}
                 <div className="flex w-fit items-center gap-2 cursor-pointer">
                   <LogOut />
                   <Button onClick={logutHandler} variant="link">

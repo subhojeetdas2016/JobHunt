@@ -22,15 +22,18 @@ const filterData = [
 function FilterCard() {
   const [selectedValue, setSelectedValue] = useState("");
   const dispatch = useDispatch();
+
   const changeHandler = (value) => {
     setSelectedValue(value);
+    console.log(`Selected filter value: ${value}`);
   };
 
   useEffect(() => {
-    dispatch(setSearchedQuery(selectedValue));
-    console.log(selectedValue);
-}, [selectedValue]);
-
+    if (selectedValue) {
+      dispatch(setSearchedQuery(selectedValue));
+      console.log(`Dispatching search with query: ${selectedValue}`);
+    }
+  }, [selectedValue, dispatch]);
 
   return (
     <div className="pl-3 w-full bg-white rounded-md">

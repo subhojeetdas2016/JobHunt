@@ -18,14 +18,21 @@ const CompanyTable = () => {
   const [filterCompany, setFilterCompany] = useState(companies);
   const navigate = useNavigate();
 
+  // Debug Logs
+  console.log("Redux State - Companies:", companies);
+  console.log("Redux State - Search Text:", searchCompanyByText);
+
   // Update filtered companies when `companies` or `searchCompanyByText` changes
   useEffect(() => {
+    console.log("Effect triggered. Companies or Search Text updated.");
     if (searchCompanyByText.trim() === "") {
+      console.log("Search text is empty. Showing all companies.");
       setFilterCompany(companies); // No filter if search text is empty
     } else {
       const filtered = companies.filter((company) =>
         company.name.toLowerCase().includes(searchCompanyByText.toLowerCase())
       );
+      console.log("Filtered Companies:", filtered);
       setFilterCompany(filtered);
     }
   }, [companies, searchCompanyByText]);
@@ -45,43 +52,49 @@ const CompanyTable = () => {
       </TableHeader>
       <TableBody>
         {filterCompany.length > 0 ? (
-          filterCompany.map((company) => (
-            <TableRow key={company._id}>
-              <TableCell>
-                <div className="flex items-center gap-2">
-                  <Avatar className="w-10 h-10">
-                    <AvatarImage
-                      src={company.logo || "/default-logo.png"}
-                      alt={company.name}
-                    />
-                  </Avatar>
-                  <span>{company.name}</span>
-                </div>
-              </TableCell>
-              <TableCell>
-                {company.description || "No description provided"}
-              </TableCell>
-              <TableCell>{/* Add Date if applicable */}</TableCell>
-              <TableCell className="text-right pr-9">
-                <Popover>
-                  <PopoverTrigger>
-                    <Button variant="ghost" className="p-0">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Button
-                      className="flex items-center gap-2 text-black hover:bg-gray-200 p-2"
-                      onClick={() => navigate(`/admin/companies/${company._id}`)}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                      Edit
-                    </Button>
-                  </PopoverContent>
-                </Popover>
-              </TableCell>
-            </TableRow>
-          ))
+          filterCompany.map((company) => {
+            console.log("Rendering Company Row:", company);
+            return (
+              <TableRow key={company._id}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage
+                        src={company.logo || "/default-logo.png"}
+                        alt={company.name}
+                      />
+                    </Avatar>
+                    <span>{company.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {company.description || "No description provided"}
+                </TableCell>
+                <TableCell>{/* Add Date if applicable */}</TableCell>
+                <TableCell className="text-right pr-9">
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button variant="ghost" className="p-0">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <Button
+                        className="flex items-center gap-2 text-black hover:bg-gray-200 p-2"
+                        onClick={() => {
+                          console.log("Navigating to Edit Page for Company:", company._id);
+                          navigate(`/admin/companies/${company._id}`);
+                        }}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Edit
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            );
+          })
         ) : (
           <TableRow>
             <TableCell colSpan={4} className="text-center">

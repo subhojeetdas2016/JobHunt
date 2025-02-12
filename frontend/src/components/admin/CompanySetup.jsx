@@ -8,12 +8,13 @@ import axios from "axios";
 import { COMPANY_API_END_POINT } from "@/utils/constant";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux"; 
+import { useDispatch, useSelector } from "react-redux";
 import useGetCompanyById from "../hooks/useGetCompanyById";
 
 const CompanySetup = () => {
   const params = useParams();
   useGetCompanyById(params.id);
+
   const [input, setInput] = useState({
     name: "",
     description: "",
@@ -27,6 +28,7 @@ const CompanySetup = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Single Company State Updated:", singleCompany);
     if (singleCompany) {
       setInput({
         name: singleCompany.name || "",
@@ -39,17 +41,29 @@ const CompanySetup = () => {
   }, [singleCompany]);
 
   const changeEventHandler = (e) => {
+    console.log(`Input field '${e.target.name}' changed to:`, e.target.value);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
   const changeFileHandler = (e) => {
     const file = e.target.files?.[0];
+    if (file && !file.type.startsWith("image/")) {
+      toast.error("Only image files are allowed.");
+      return;
+    }
+    console.log("Selected File:", file);
     setInput({ ...input, file });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("Input Data:", input);
+    console.log("Form Submitted. Input Data:", input);
+
+    if (!params.id) {
+      toast.error("Invalid company ID.");
+      console.error("Invalid company ID provided:", params.id);
+      return;
+    }
 
     const formData = new FormData();
     formData.append("name", input.name);
@@ -62,9 +76,12 @@ const CompanySetup = () => {
     }
 
     try {
+      console.log("Sending update request to:", `${COMPANY_API_END_POINT}/update/${params.id}`);
+      console.log("Form Data to Send:", Array.from(formData.entries()));
+
       setLoading(true);
       const res = await axios.put(
-        `${COMPANY_API_END_POINT}/update/${params.id}`, 
+        `${COMPANY_API_END_POINT}/update/${params.id}`,
         formData,
         {
           headers: {
@@ -74,12 +91,17 @@ const CompanySetup = () => {
         }
       );
 
+      console.log("API Response:", res.data);
       if (res.data.success) {
         toast.success(res.data.message);
+        console.log("Navigation to companies list.");
         navigate("/admin/companies");
+      } else {
+        console.error("Update failed. Server message:", res.data.message);
+        toast.error(res.data.message || "Failed to update the company.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error during API request:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -93,7 +115,10 @@ const CompanySetup = () => {
         <form onSubmit={submitHandler}>
           <div className="flex items-center gap-5 p-8">
             <Button
-              onClick={() => navigate("/admin/companies")}
+              onClick={() => {
+                console.log("Back button clicked. Navigating back.");
+                navigate("/admin/companies");
+              }}
               variant="outline"
               className="hover:bg-gray-300 hover:text-white flex items-center gap-2 text-black font-semibold"
             >
@@ -105,9 +130,7 @@ const CompanySetup = () => {
 
           <div className="grid grid-cols-1 items-center gap-3">
             <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap font-semibold w-1/3">
-                Company Name
-              </Label>
+              <Label className="whitespace-nowrap font-semibold w-1/3">Company Name</Label>
               <Input
                 type="text"
                 name="name"
@@ -118,9 +141,7 @@ const CompanySetup = () => {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap font-semibold w-1/3">
-                Description
-              </Label>
+              <Label className="whitespace-nowrap font-semibold w-1/3">Description</Label>
               <Input
                 type="text"
                 name="description"
@@ -130,9 +151,7 @@ const CompanySetup = () => {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap font-semibold w-1/3">
-                Website
-              </Label>
+              <Label className="whitespace-nowrap font-semibold w-1/3">Website</Label>
               <Input
                 type="text"
                 name="website"
@@ -142,9 +161,7 @@ const CompanySetup = () => {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap font-semibold w-1/3">
-                Location
-              </Label>
+              <Label className="whitespace-nowrap font-semibold w-1/3">Location</Label>
               <Input
                 type="text"
                 name="location"
@@ -154,9 +171,7 @@ const CompanySetup = () => {
               />
             </div>
             <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap font-semibold w-1/3">
-                Logo
-              </Label>
+              <Label className="whitespace-nowrap font-semibold w-1/3">Logo</Label>
               <Input
                 type="file"
                 accept="image/*"

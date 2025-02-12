@@ -10,7 +10,6 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setloading } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react";
-// import getDataUri from '../utils/datauri.js';
 
 const Signup = () => {
   const [input, setInput] = useState({
@@ -30,22 +29,25 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    // Redirect to home if user is already logged in
+    console.log("Checking if user is already logged in:", user);
     if (user) {
       navigate("/");
     }
   }, [user, navigate]);
 
   const changeEventHandler = (e) => {
+    console.log(`Changing input for ${e.target.name}:`, e.target.value);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
   const changeFileHandler = (e) => {
+    console.log("File selected:", e.target.files?.[0]);
     setInput({ ...input, file: e.target.files?.[0] });
   };
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
+    console.log("Toggled showPassword:", !showPassword);
   };
 
   const submitHandler = async (e) => {
@@ -61,6 +63,14 @@ const Signup = () => {
       formData.append("file", input.file);
     }
 
+    console.log("Submitting form data:", {
+      fullname: input.fullname,
+      email: input.email,
+      phoneNumber: input.phoneNumber,
+      role: input.role,
+      file: input.file ? input.file.name : null,
+    });
+
     try {
       dispatch(setloading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
@@ -69,12 +79,13 @@ const Signup = () => {
         },
         withCredentials: true,
       });
+      console.log("Server response:", res.data);
       if (res.data.success) {
         navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error during registration:", error);
       toast.error(error.response?.data?.message || "Something went wrong.");
     } finally {
       dispatch(setloading(false));
@@ -143,37 +154,10 @@ const Signup = () => {
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {/* Toggle password visibility SVG */}
-              {showPassword ? (
-                <svg
-                  className="w-6 h-6 text-black dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.998 7.78C6.729 6.345 9.198 5 12 5c2.802 0 5.27 1.345 7.002 2.78a12.713 12.713 0 0 1 2.096 2.183c.253.344.465.682.618.997.14.286.284.658.284 1.04s-.145.754-.284 1.04a6.6 6.6 0 0 1-.618.997 12.712 12.712 0 0 1-2.096 2.183C17.271 17.655 14.802 19 12 19c-2.802 0-5.27-1.345-7.002-2.78a12.712 12.712 0 0 1-2.096-2.183 6.6 6.6 0 0 1-.618-.997C2.144 12.754 2 12.382 2 12s.145-.754.284-1.04c.153-.315.365-.653.618-.997A12.714 12.714 0 0 1 4.998 7.78ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6 text-black dark:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="..." />
-                </svg>
-              )}
             </button>
           </div>
 
-          {/* Role selection and file upload */}
           <div className="flex items-center justify-between">
-            {/* Radio inputs */}
             <div className="flex items-center gap-4 my-5">
               <div className="flex items-center space-x-2">
                 <Input
@@ -202,7 +186,6 @@ const Signup = () => {
               </div>
             </div>
 
-            {/* File input */}
             <div className="flex items-center gap-2">
               <Label>Profile</Label>
               <Input
@@ -215,7 +198,6 @@ const Signup = () => {
             </div>
           </div>
 
-          {/* Submit button */}
           {loading ? (
             <Button>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait

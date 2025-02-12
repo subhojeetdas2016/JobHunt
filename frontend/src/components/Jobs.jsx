@@ -10,17 +10,21 @@ const Jobs = () => {
   const [filterJobs, setFilterJobs] = useState(allJobs);
 
   useEffect(() => {
-    console.log("Searched Query in Redux:", searchedQuery);
+    console.log("Searched Query in Redux:", searchedQuery); // Debugging searched query
+    console.log("All Jobs from Redux:", allJobs); // Debugging all jobs data
     if (searchedQuery) {
       const filteredJobs = allJobs.filter((job) => {
-        return (
+        const match =
           job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
           job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-          job.location.toLowerCase().includes(searchedQuery.toLowerCase())
-        );
+          job.location.toLowerCase().includes(searchedQuery.toLowerCase());
+        console.log(`Job "${job.title}" matches search query:`, match); // Debugging job match
+        return match;
       });
+      console.log("Filtered Jobs based on Query:", filteredJobs); // Debugging filtered jobs
       setFilterJobs(filteredJobs);
     } else {
+      console.log("No search query, displaying all jobs."); // Debugging fallback to all jobs
       setFilterJobs(allJobs); // Show all jobs if no filter is applied
     }
   }, [allJobs, searchedQuery]);

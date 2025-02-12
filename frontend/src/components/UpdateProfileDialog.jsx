@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogFooter,
+} from "./ui/dialog";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Loader2, X } from "lucide-react";
@@ -25,20 +32,28 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
 
   const dispatch = useDispatch();
 
+  // Debugging Logs
+  console.log("UpdateProfileDialog Rendered");
+  console.log("Open State:", open);
+  console.log("User Data:", user);
+
   // Handle input change for text fields
   const changeHandler = (e) => {
+    console.log(`Input Changed: ${e.target.name} = ${e.target.value}`);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
   // Handle file input change
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
+    console.log("File Selected:", file);
     setInput({ ...input, file });
   };
 
   // Submit form handler
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log("Form Submitted with Data:", input);
 
     const formData = new FormData();
     formData.append("fullname", input.fullname);
@@ -46,34 +61,36 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("bio", input.bio);
     formData.append("skills", input.skills);
-    if(input.file){
-    formData.append("file", input.file);
-  }
+    if (input.file) {
+      formData.append("file", input.file);
+    }
     setLoading(true);
 
     try {
-      const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${USER_API_END_POINT}/profile/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+
+      console.log("Server Response:", res.data);
 
       if (res.data.success) {
         dispatch(setUser(res.data.user));
         toast.success(res.data.message || "Profile updated successfully!");
-        console.log("updated profile",res.data.user);
       }
-    } catch (err){
-      console.error(err);
+    } catch (err) {
+      console.error("Error Occurred:", err);
       toast.error(err.response?.data?.message || "Failed to update profile.");
-    }
-    finally {
+    } finally {
       setLoading(false);
       setOpen(false);
-    } 
-    console.log(input);
-    
+    }
   };
 
   return (

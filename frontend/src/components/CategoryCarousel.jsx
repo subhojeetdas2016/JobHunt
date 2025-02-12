@@ -10,24 +10,28 @@ const category = [
     "Software Engineer",
     "UI/UX Designer",
     "FullStack Developer"
-    
 ];
-
 
 function CategoryCarousel() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const searchJobHandler = (Query)=>{
+
+    const searchJobHandler = (Query) => {
+        console.log(`Category selected: ${Query}`);
         dispatch(setSearchedQuery(Query));
         navigate("/browse");
     }
+
     return (
         <div>
             <Carousel className="w-full max-w-xl mx-auto my-20 ">
                 <CarouselContent className=" pl-5 flex space-x-20 ">
                     {category.map((cat, index) => (
                         <React.Fragment key={index}>
-                            <Button onclick={()=>searchJobHandler(cat)}
+                            <Button onclick={() => {
+                                console.log(`Searching for jobs in category: ${cat}`);
+                                searchJobHandler(cat);
+                            }}
                                 variant="outline"
                                 className="bg-[#c31664] rounded-full shadow-2xl text-white w-full m"
                             >
@@ -42,6 +46,5 @@ function CategoryCarousel() {
         </div>
     );
 }
-
 
 export default CategoryCarousel;

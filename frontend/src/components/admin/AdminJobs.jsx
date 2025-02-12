@@ -4,20 +4,23 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setSearchCompanyByText } from "@/redux/companySlice";
 import AdminJobsTable from "./AdminJobsTable";
 import useGetAllAdminJobs from "../hooks/useGetAllAdminJobs";
 import { setSearchJobByText } from "@/redux/jobslice";
 
-
 const AdminJobs = () => {
+  console.log("AdminJobs component rendering...");
+
   useGetAllAdminJobs(); // Fetch all companies
   const [input, setInput] = useState(""); // State for the input field
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log("Current input state:", input);
+
   // Dispatch the search text whenever input changes
   useEffect(() => {
+    console.log("useEffect triggered. Dispatching input to Redux:", input);
     dispatch(setSearchJobByText(input));
   }, [input, dispatch]);
 
@@ -31,16 +34,22 @@ const AdminJobs = () => {
             className="w-fit"
             placeholder="Filter by name"
             value={input} // Bind input state to the value
-            onChange={(e) => setInput(e.target.value)} // Update state on input change
+            onChange={(e) => {
+              console.log("Input field value changed:", e.target.value);
+              setInput(e.target.value); // Update state on input change
+            }}
           />
           <Button
-            onClick={() => navigate("/admin/jobs/create")} // Use navigate here
+            onClick={() => {
+              console.log("Navigating to create job page...");
+              navigate("/admin/jobs/create"); // Use navigate here
+            }}
             className="text-[#ffffff] bg-[#c31664] hover:bg-pink-600/100"
           >
             New Jobs
           </Button>
         </div>
-        <AdminJobsTable/>
+        <AdminJobsTable />
       </div>
     </div>
   );

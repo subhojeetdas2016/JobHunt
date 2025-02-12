@@ -16,7 +16,7 @@ const HeroSection = () => {
         <div className='text-center'>
             <div className='flex flex-col gap-5 my-10'>
                 <h1 className='text-5xl font-bold'>Explore, Apply <span className='text-[#f0d214]'>&</span><br />Secure Your <span className='text-[#c31664]'>Ideal Job</span></h1>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Earum libero, illo enim ex quae architecto.</p>
+                <p>JobHunt: Helping You Find Your Next Career Move with Ease and Confidence.</p>
                 <div className='flex w-[40%] shadow-[0px_0px_2px_2px_rgba(219,112,147,112)] border border-pink pl-3 rounded-full items-center gap-4  mx-auto'>
                     <input type="text"
                         placeholder='Explore Jobs'

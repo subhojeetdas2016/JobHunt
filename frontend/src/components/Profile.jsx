@@ -14,16 +14,21 @@ import useGetAppliedJobs from "./hooks/useGetAppliedJob";
 // const skills = ['React', 'JavaScript', 'Tailwind'];
 const isResume = true; // Declare and initialize isResume variable
 
-
 function Profile() {
   useGetAppliedJobs();
-    const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector((store) => store.auth);
   const [open, setOpen] = useState(false);
+
+  // Debugging Logs
+  console.log("Rendering Profile Component");
+  console.log("User Data:", user);
+  console.log("Dialog Open State:", open);
+
   return (
     <div>
       <Navbar />
       <div className="max-w-7xl mx-auto bg-[#D3D3D3] border border-gray-200 rounded-2xl my-5 p-8">
-        <div className="flex justify-between  my-5 ">
+        <div className="flex justify-between my-5">
           <div className="flex items-center">
             <Avatar className="flex h-24 w-24">
               <AvatarImage
@@ -33,12 +38,15 @@ function Profile() {
               />
             </Avatar>
             <div className="pl-5">
-              <h1 className="font-bold ">{user?.fullname}</h1>
-              <p>{user?.profile.bio}</p>
+              <h1 className="font-bold">{user?.fullname}</h1>
+              <p>{user?.profile?.bio}</p>
             </div>
           </div>
           <Button
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              console.log("Edit Button Clicked");
+              setOpen(true);
+            }}
             className="bg-white text-right"
             variant="outline"
           >
@@ -59,16 +67,19 @@ function Profile() {
         </div>
         <div className="my-5">
           <h1 className="font-bold">Skills</h1>
-          <div className="flex items-center gap-1 ">
+          <div className="flex items-center gap-1">
             {user?.profile?.skills?.length > 0 ? (
-              user.profile.skills.map((item, index) => (
-                <Badge
-                  className="px-3 py-1 bg-pink-600 text-white rounded-full text-sm"
-                  key={index}
-                >
-                  {item}
-                </Badge>
-              ))
+              user.profile.skills.map((item, index) => {
+                console.log("Rendering Skill:", item);
+                return (
+                  <Badge
+                    className="px-3 py-1 bg-pink-600 text-white rounded-full text-sm"
+                    key={index}
+                  >
+                    {item}
+                  </Badge>
+                );
+              })
             ) : (
               <span>NA</span>
             )}
@@ -76,25 +87,29 @@ function Profile() {
         </div>
         <Label className="text-md font-bold">Resume</Label>
         <div className="flex items-center gap-1">
-        {user?.profile?.resumeOriginalName && (
-  <a
-    target="_blank"
-    rel="noopener noreferrer"
-    href={user?.profile?.resume}
-    className="cursor-pointer px-3 py-1 bg-pink-600 text-white font-semibold rounded-full text-sm"
-  >
-    {user?.profile?.resumeOriginalName}
-  </a>
-)}
-
-
+          {user?.profile?.resumeOriginalName && (
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={user?.profile?.resume}
+              className="cursor-pointer px-3 py-1 bg-pink-600 text-white font-semibold rounded-full text-sm"
+            >
+              {user?.profile?.resumeOriginalName}
+            </a>
+          )}
         </div>
       </div>
-      <div className="max-w-7xl  mx-auto bg-white rounded-2xl">
+      <div className="max-w-7xl mx-auto bg-white rounded-2xl">
         <h1 className="font-bold text-lg my-5">Applied Jobs</h1>
         <AppliedJobTable />
       </div>
-      <UpdateProfileDialog open={open} setOpen={setOpen} />
+      <UpdateProfileDialog
+        open={open}
+        setOpen={(state) => {
+          console.log("Dialog State Changed:", state);
+          setOpen(state);
+        }}
+      />
     </div>
   );
 }
