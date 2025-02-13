@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
@@ -142,7 +142,12 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             </div>
             <div className="grid grid-cols-1 gap-2">
               <Label htmlFor="bio">Bio</Label>
-              <Input id="bio" name="bio" value={input.bio} onChange={changeHandler} />
+              <Input
+                id="bio"
+                name="bio"
+                value={input.bio}
+                onChange={changeHandler}
+              />
             </div>
             <div className="grid grid-cols-1 gap-2 ">
               <Label htmlFor="skills">Skills</Label>

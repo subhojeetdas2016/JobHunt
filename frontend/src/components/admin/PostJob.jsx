@@ -15,7 +15,7 @@ import {
 import axios from "axios";
 import { JOB_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 const companyArray = [];
@@ -38,7 +38,12 @@ function PostJob() {
   const { companies } = useSelector((store) => store.company);
 
   const changeEventHandler = (e) => {
-    console.log("Change Event - Field:", e.target.name, "Value:", e.target.value);
+    console.log(
+      "Change Event - Field:",
+      e.target.name,
+      "Value:",
+      e.target.value
+    );
     setinput({ ...input, [e.target.name]: e.target.value });
   };
 
