@@ -6,7 +6,6 @@ import LatestJobs from "./LatestJobs";
 import Footer from "./footer";
 import useGetAllJob from "./hooks/useGetAllJob";
 import { useSelector } from "react-redux";
-import store from "@/redux/store";
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const Home = () => {

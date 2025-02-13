@@ -11,7 +11,7 @@ import { LogOut, User2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
-import { toast } from "sonner";
+import { toast } from "../ui/sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

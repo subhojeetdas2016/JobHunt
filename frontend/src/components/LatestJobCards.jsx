@@ -1,7 +1,6 @@
 import React from 'react';
 import { Badge } from './ui/badge';
 import { useNavigate } from 'react-router-dom';
-import { motion } from "framer-motion";
 
 const LatestJobCards = ({ Job }) => {
   const navigate = useNavigate();

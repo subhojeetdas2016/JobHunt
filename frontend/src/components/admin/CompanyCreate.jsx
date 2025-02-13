@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { COMPANY_API_END_POINT } from "@/utils/constant";
-import { toast } from "sonner";
+import { toast } from "../ui/sonner";
 import { useDispatch } from "react-redux";
 import { setSingleCompany } from "@/redux/companySlice";
 
@@ -42,7 +42,10 @@ const CompanyCreate = () => {
         toast.error(res.data.message || "Failed to create company");
       }
     } catch (error) {
-      console.error("Error creating company:", error.response?.data || error.message);
+      console.error(
+        "Error creating company:",
+        error.response?.data || error.message
+      );
       toast.error(error.response?.data?.message || "An error occurred");
     }
   };
@@ -54,7 +57,8 @@ const CompanyCreate = () => {
         <div className="my-10">
           <h1 className="font-bold text-2xl">Your Company Name</h1>
           <p className="text-gray-500">
-            What would you like to give your Company Name? You can change this later.
+            What would you like to give your Company Name? You can change this
+            later.
           </p>
         </div>
         <Label>Company Name</Label>

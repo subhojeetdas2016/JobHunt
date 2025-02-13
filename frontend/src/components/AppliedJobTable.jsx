@@ -1,10 +1,17 @@
-import React from 'react';
-import { Table, TableCaption, TableCell, TableHead, TableHeader, TableRow, TableBody } from './ui/table';
-import { Badge } from './ui/badge';
-import { useSelector } from 'react-redux';
+import React from "react";
+import {
+  Table,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableBody,
+} from "./ui/table";
+import { Badge } from "./ui/badge";
+import { useSelector } from "react-redux";
 
 function AppliedJobTable() {
-  const { allAppliedJobs } = useSelector(store => store.job);
+  const { allAppliedJobs } = useSelector((store) => store.job);
 
   console.log("Rendering AppliedJobTable...");
   console.log("Fetched Applied Jobs:", allAppliedJobs);
@@ -26,16 +33,22 @@ function AppliedJobTable() {
               console.log("Rendering row for applied job:", appliedJob);
               return (
                 <TableRow key={appliedJob._id}>
-                  <TableCell>{appliedJob?.createdAt?.split("T")[0] || 'N/A'}</TableCell>
-                  <TableCell>{appliedJob?.job?.title || 'N/A'}</TableCell>
-                  <TableCell>{appliedJob?.job?.company?.name || 'N/A'}</TableCell>
+                  <TableCell>
+                    {appliedJob?.createdAt?.split("T")[0] || "N/A"}
+                  </TableCell>
+                  <TableCell>{appliedJob?.job?.title || "N/A"}</TableCell>
+                  <TableCell>
+                    {appliedJob?.job?.company?.name || "N/A"}
+                  </TableCell>
                   <TableCell className="text-center">
                     <Badge
                       className={`cursor-pointer text-white font-semibold rounded-full text-sm ${
-                        appliedJob.status === 'Selected' ? 'bg-[#73b887]' : 'bg-red-500'
+                        appliedJob.status === "Selected"
+                          ? "bg-[#73b887]"
+                          : "bg-red-500"
                       }`}
                     >
-                      {appliedJob.status || 'Pending'}
+                      {appliedJob.status || "Pending"}
                     </Badge>
                   </TableCell>
                 </TableRow>

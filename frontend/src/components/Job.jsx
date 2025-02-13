@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "./ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const Job = ({ job }) => {
   const navigate = useNavigate();
