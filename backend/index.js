@@ -31,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const corsOptions = {
-    origin: ['http://localhost:5173','http://localhost:5174'],  // Corrected the missing colon
+    origin: 'https://jobhunt-hqx5.onrender.com/',  // Corrected the missing colon
     credentials: true  // Corrected `Credentials` to `credentials`
 };
 
@@ -49,13 +49,13 @@ const PORT = process.env.PORT || 8080;
 
 //api's
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1/company", companyRoute);   
+app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
 app.use("/api/v1/application", applicationRoute);
 
-app.use(express.static(path.join(_dirname,"/frontend/dist")));
-app.get('*',(_,res)=>{
-    res.sendFile(path.resolve(_dirname,"frontend","dist","index.html"));
+app.use(express.static(path.join(_dirname, "/frontend/dist")));
+app.get('*', (_, res) => {
+    res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
 });
 
 // "http://localhost:3000/api/v1/user/register"
