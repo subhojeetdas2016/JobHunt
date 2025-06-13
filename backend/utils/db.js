@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const uri = 'mongodb+srv://subhojeetdas2016:SUbhojeet592u@cluster0.f5uyx.mongodb.net/'
+const uri = 'mongodb+srv://subhojeetdas2016:i58ezkeGLLGu0oVi@cluster0.f5uyx.mongodb.net/'
 const connectDb = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
@@ -9,5 +9,6 @@ const connectDb = async () => {
         console.error(err);
     }
 }
+
 
 export default connectDb;
